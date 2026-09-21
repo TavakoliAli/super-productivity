@@ -102,10 +102,13 @@ export const LANGUAGE_SELECTION_FORM_FORM: ConfigFormSection<LocalizationConfig>
       key: 'calendar',
       type: 'select',
       templateOptions: {
-        label: 'Calendar',
+        label: T.GCF.LANG.CALENDAR,
         options: [
-          { label: 'Gregorian', value: 'gregorian' },
-          { label: 'Jalali', value: 'jalali' },
+          { label: T.GCF.LANG.CALENDAR_GREGORIAN, value: 'gregorian' },
+          {
+            label: T.GCF.LANG.CALENDAR_PERSIAN_SOLAR_HIJRI,
+            value: 'jalali',
+          },
         ],
       },
     },
