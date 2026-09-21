@@ -58,6 +58,26 @@ export class DateTimeFormatService {
     () => this.isoTextLocale() ?? this.currentLocale(),
   );
 
+  /**
+   * Format a date as short month + day using the configured calendar.
+   *
+   * The ISO 8601 option keeps Gregorian calendar formatting while using
+   * the UI language for month names.
+   */
+  formatMonthDay(date: Date): string {
+    const locale = this.textLocale();
+    const calendar =
+      this._globalConfigService.localization()?.calendar === 'jalali'
+        ? 'persian'
+        : 'gregory';
+
+    return new Intl.DateTimeFormat(locale, {
+      calendar,
+      month: 'short',
+      day: 'numeric',
+    }).format(date);
+  }
+
   /** Test formats to detect locale-specific time and date formats (e.g., 24h vs 12h, DD/MM vs MM/DD) */
   private readonly _testFormats = computed(() => {
     const locale = this.currentLocale();

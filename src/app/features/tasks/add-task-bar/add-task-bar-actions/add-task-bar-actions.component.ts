@@ -149,12 +149,9 @@ export class AddTaskBarActionsComponent {
     if (!state.time && this.isSameDate(date, tomorrow)) {
       return this._translateService.instant(T.F.TASK.ADD_TASK_BAR.TOMORROW);
     }
-    // Spelled-out `month: 'short'` name follows the UI language under the ISO
-    // option, so it isn't shown in Swedish (the `sv` sentinel); #8987 follow-up.
-    const dateStr = date.toLocaleDateString(this._dateTimeFormatService.textLocale(), {
-      month: 'short',
-      day: 'numeric',
-    });
+
+    const dateStr = this._dateTimeFormatService.formatMonthDay(date);
+
     return timeStr ? `${dateStr} ${timeStr}` : dateStr;
   });
 
