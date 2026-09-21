@@ -5,6 +5,7 @@ import { T } from 'src/app/t.const';
 import { getDbDateStr, isDBDateStr } from '../../util/get-db-date-str';
 import { formatMonthDay } from '../../util/format-month-day.util';
 import { DateTimeFormatService } from '../../core/date-time-format/date-time-format.service';
+import { GlobalConfigService } from '../../features/config/global-config.service';
 
 @Pipe({
   name: 'localDateStr',
@@ -12,6 +13,7 @@ import { DateTimeFormatService } from '../../core/date-time-format/date-time-for
 })
 export class LocalDateStrPipe implements PipeTransform {
   private _dateTimeFormatService = inject(DateTimeFormatService);
+  private _globalConfigService = inject(GlobalConfigService);
   private translateService = inject(TranslateService);
 
   transform(
@@ -31,6 +33,10 @@ export class LocalDateStrPipe implements PipeTransform {
     const d = dateStrToUtcDate(value);
     // Use the configured locale if available, otherwise fall back to default
     const locale = this._dateTimeFormatService.currentLocale();
-    return formatMonthDay(d, locale);
+    return formatMonthDay(
+      d,
+      locale,
+      this._globalConfigService.localization()?.calendar ?? 'gregorian',
+    );
   }
 }

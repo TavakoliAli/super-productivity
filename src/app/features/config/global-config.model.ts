@@ -206,6 +206,7 @@ export type LocalizationConfig = Readonly<{
   lng?: LanguageCode | null;
   firstDayOfWeek?: number | null;
   dateTimeLocale?: DateTimeLocale | null;
+  calendar?: 'gregorian' | 'jalali' | null;
 }>;
 
 export type SoundConfig = Readonly<{

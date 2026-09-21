@@ -98,5 +98,16 @@ export const LANGUAGE_SELECTION_FORM_FORM: ConfigFormSection<LocalizationConfig>
         ],
       },
     },
+    {
+      key: 'calendar',
+      type: 'select',
+      templateOptions: {
+        label: 'Calendar',
+        options: [
+          { label: 'Gregorian', value: 'gregorian' },
+          { label: 'Jalali', value: 'jalali' },
+        ],
+      },
+    },
   ],
 };

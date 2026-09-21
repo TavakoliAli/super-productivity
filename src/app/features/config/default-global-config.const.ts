@@ -38,6 +38,7 @@ export const DEFAULT_GLOBAL_CONFIG: GlobalConfigState = {
     lng: undefined,
     dateTimeLocale: undefined,
     firstDayOfWeek: undefined,
+    calendar: 'gregorian',
   },
   tasks: {
     isConfirmBeforeDelete: true,

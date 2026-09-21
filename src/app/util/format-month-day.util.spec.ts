@@ -167,10 +167,12 @@ describe('formatMonthDay', () => {
       expect(result).not.toContain('2023');
     });
 
-    it('should fallback to basic format when locale data is missing', () => {
-      // Use a non-existent locale to trigger fallback
-      const result = formatMonthDay(testDate, 'xx-XX' as DateTimeLocale);
-      expect(result).toBe('25/12'); // Should fallback to d/M format
+    it('should fallback to basic format when locale formatting fails', () => {
+      spyOn(Intl, 'DateTimeFormat').and.throwError('Formatting failed');
+
+      const result = formatMonthDay(testDate, DateTimeLocales.en_us);
+
+      expect(result).toBe('25/12');
     });
   });
 
@@ -250,6 +252,31 @@ describe('formatMonthDay', () => {
         // Should contain the actual single digits
         expect(result).toMatch(/[15]/); // Should contain either 1 or 5 (our test date digits)
       });
+    });
+  });
+  describe('Jalali calendar', () => {
+    it('should format month/day using the Jalali calendar', () => {
+      const date = new Date(2023, 11, 25);
+
+      const result = formatMonthDay(date, DateTimeLocales.en_us, 'jalali');
+
+      expect(result).toBe('10/4');
+    });
+
+    it('should format a Jalali date with a single-digit day', () => {
+      const date = new Date(2026, 2, 21);
+
+      const result = formatMonthDay(date, DateTimeLocales.en_us, 'jalali');
+
+      expect(result).toBe('1/1');
+    });
+
+    it('should keep Gregorian formatting when calendar is Gregorian', () => {
+      const date = new Date(2026, 2, 21);
+
+      const result = formatMonthDay(date, DateTimeLocales.en_us, 'gregorian');
+
+      expect(result).toBe('3/21');
     });
   });
 });

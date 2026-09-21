@@ -6,6 +6,7 @@ import localeEnGB from '@angular/common/locales/en-GB';
 import { LocaleDatePipe } from './locale-date.pipe';
 import { DateTimeFormatService } from '../../core/date-time-format/date-time-format.service';
 import { Log } from '../../core/log';
+import { GlobalConfigService } from '../../features/config/global-config.service';
 
 describe('LocaleDatePipe', () => {
   let pipe: LocaleDatePipe;
@@ -34,7 +35,18 @@ describe('LocaleDatePipe', () => {
     });
 
     TestBed.configureTestingModule({
-      providers: [LocaleDatePipe, { provide: DateTimeFormatService, useValue: spy }],
+      providers: [
+        LocaleDatePipe,
+        { provide: DateTimeFormatService, useValue: spy },
+        {
+          provide: GlobalConfigService,
+          useValue: {
+            localization: () => ({
+              calendar: 'gregorian',
+            }),
+          },
+        },
+      ],
     });
 
     pipe = TestBed.inject(LocaleDatePipe);
@@ -131,5 +143,31 @@ describe('LocaleDatePipe', () => {
     expect(en).toBe('January');
     expect(de).toBe('Januar');
     expect(en).not.toBe(de);
+  });
+
+  describe('Jalali calendar', () => {
+    beforeEach(() => {
+      const globalConfigService = TestBed.inject(GlobalConfigService);
+
+      spyOn(globalConfigService, 'localization').and.returnValue({
+        calendar: 'jalali',
+      });
+    });
+
+    it('should format yyyy/MM/dd using the Jalali calendar', () => {
+      const date = new Date(2026, 2, 21);
+
+      const result = pipe.transform(date, 'yyyy/MM/dd');
+
+      expect(result).toBe('1405/01/01');
+    });
+
+    it('should format shortDate using the Jalali calendar', () => {
+      const date = new Date(2026, 2, 21);
+
+      const result = pipe.transform(date, 'shortDate', undefined, 'en-US');
+
+      expect(result).toContain('1405');
+    });
   });
 });
